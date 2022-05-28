@@ -34,7 +34,6 @@ const App: FC = () => {
     setNumber(0);
     setLoading(false);
   };
-  console.log(questions);
 
   const nextQuestion = () => {
     const nextQ = number + 1;
@@ -63,6 +62,16 @@ const App: FC = () => {
       setUserAnswers([...userAnswers, answerObject]);
     }
   };
+  const getInterestScore = () => {
+    if (userAnswers.length > 0) {
+      const score = userAnswers.reduce((acc: number, cur: AnswerObject) => {
+        if (cur.correct) acc++;
+        return acc;
+      }, 0);
+      return `${(score / TOTAL_QUESTIONS) * 100}%`;
+    }
+    return "0%";
+  };
   return (
     <>
       <GlobalStyle />
@@ -76,7 +85,9 @@ const App: FC = () => {
           ""
         )}
 
-        <p className="score">Score: {score}</p>
+        <p className="score">
+          Score: {score} | Interest Score: {getInterestScore()}
+        </p>
         {loading ? <p>Loading Questions...</p> : null}
         {!loading && !gameOver && (
           <QuestionCard
